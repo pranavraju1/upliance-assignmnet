@@ -2,164 +2,140 @@ import React, { useState, useEffect } from 'react';
 import './styles.css';
 
 const TextEditor = () => {
-    const [userData, setUserData] = useState({
-        id: "",
-        name: "",
-        email: "",
-        address: "",
-        password: ""
-    });
+    const [users, setUsers] = useState([]); // Store all users
+    const [isListView, setIsListView] = useState(false);
+    const [editing, setEditing] = useState(false);
 
-    const [isListView, setIsListView] = useState(false); // New state to toggle list view
-    const [editing, setEditing] = useState(false); // New state to toggle editing mode
-
-    // Load cookie data from localStorage on initial render
     useEffect(() => {
-        const cookieData = JSON.parse(localStorage.getItem("Users"));
-        if (cookieData) {
-            setUserData(cookieData[0]); // Assuming you have only one user in the cookie for now
-        }
+        const cookieData = JSON.parse(localStorage.getItem("Users")) || [];
+        setUsers(cookieData);
     }, []);
 
     const handleBold = (e) => {
         e.preventDefault();
-        const detailsContainers = document.getElementsByClassName('details-container');
-        Array.from(detailsContainers).forEach((item) => {
+        document.querySelectorAll('.details-container').forEach(item => {
             item.classList.toggle('fw-bold');
         });
     };
 
     const handleUnderline = (e) => {
         e.preventDefault();
-        const detailsContainers = document.getElementsByClassName('details-container');
-        Array.from(detailsContainers).forEach((item) => {
+        document.querySelectorAll('.details-container').forEach(item => {
             item.classList.toggle('text-decoration-underline');
         });
     };
 
     const handleItalic = (e) => {
         e.preventDefault();
-        const detailsContainers = document.getElementsByClassName('details-container');
-        Array.from(detailsContainers).forEach((item) => {
+        document.querySelectorAll('.details-container').forEach(item => {
             item.classList.toggle('fst-italic');
         });
     };
 
     const handleList = (e) => {
         e.preventDefault();
-        setIsListView((prev) => !prev); // Toggle list view state
+        setIsListView(prev => !prev);
     };
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setUserData((prev) => ({
-            ...prev,
-            [name]: value
-        }));
+    const handleChange = (index, field, value) => {
+        const updatedUsers = [...users];
+        updatedUsers[index][field] = value;
+        setUsers(updatedUsers);
     };
 
     const handleSave = () => {
-        localStorage.setItem("Users", JSON.stringify([userData]));
-        setEditing(false); // Disable editing after saving
+        localStorage.setItem("Users", JSON.stringify(users));
+        setEditing(false);
     };
 
     return (
         <div className='container'>
-            <div className='card w-100 bg-light mt-5'>
-                <div className='w-100 toolbar d-flex gap-3'>
-                    <div className="tools fw-bold d-flex justify-content-center align-items-center rounded" onClick={handleBold}>B</div>
-                    <div className="tools fw-bold d-flex justify-content-center align-items-center rounded" onClick={handleUnderline}>U</div>
-                    <div className="tools fw-bold d-flex justify-content-center align-items-center rounded" onClick={handleItalic}><i>I</i></div>
-                    <div className="tools fw-bold d-flex justify-content-center align-items-center rounded" onClick={handleList}>List</div>
+            <div className='card w-100 mt-5'>
+                <div className='w-100 toolbar bg-secondary rounded d-flex gap-3 p-2'>
+                    <button className="btn btn-light tools fw-bold" onClick={handleBold}>B</button>
+                    <button className="btn btn-light tools fw-bold" onClick={handleUnderline}>U</button>
+                    <button className="btn btn-light tools fw-bold" onClick={handleItalic}><i>I</i></button>
+                    <button className="btn btn-light tools fw-bold" onClick={handleList}>List</button>
                 </div>
-                <div className='editor bg-white rounded'>
-                    {userData && (
-                        <div className='details-container'>
-                            {isListView ? (
-                                <ul>
-                                    <li>
-                                        <span>Name:</span>
-                                        <div
-                                            contentEditable={editing}
-                                            name="name"
-                                            onInput={handleChange}
-                                        >{userData.name}</div>
-                                    </li>
-                                    <li>
-                                        <span>Email:</span>
-                                        <div
-                                            contentEditable={editing}
-                                            name="email"
-                                            onInput={handleChange}
-                                        >{userData.email}</div>
-                                    </li>
-                                    <li>
-                                        <span>Address:</span>
-                                        <div
-                                            contentEditable={editing}
-                                            name="address"
-                                            onInput={handleChange}
-                                        >{userData.address}</div>
-                                    </li>
-                                    <li>
-                                        <span>Password:</span>
-                                        <div
-                                            contentEditable={editing}
-                                            name="password"
-                                            onInput={handleChange}
-                                        >{userData.password}</div>
-                                    </li>
-                                </ul>
-                            ) : (
-                                <>
-                                    <p>
-                                        <span>Name:</span>
-                                        <div
-                                            contentEditable={editing}
-                                            name="name"
-                                            onInput={handleChange}
-                                        >{userData.name}</div>
-                                    </p>
-                                    <p>
-                                        <span>Email:</span>
-                                        <div
-                                            contentEditable={editing}
-                                            name="email"
-                                            onInput={handleChange}
-                                        >{userData.email}</div>
-                                    </p>
-                                    <p>
-                                        <span>Address:</span>
-                                        <div
-                                            contentEditable={editing}
-                                            name="address"
-                                            onInput={handleChange}
-                                        >{userData.address}</div>
-                                    </p>
-                                    <p>
-                                        <span>Password:</span>
-                                        <div
-                                            contentEditable={editing}
-                                            name="password"
-                                            onInput={handleChange}
-                                        >{userData.password}</div>
-                                    </p>
-                                </>
-                            )}
-                        </div>
+                <div className='editor bg-white rounded p-3'>
+                    {users.length > 0 ? (
+                        users.map((user, index) => (
+                            <div key={index} className='details-container mb-3'>
+                                {isListView ? (
+                                    <ul>
+                                        <li>
+                                            <span>Name:</span>
+                                            <span
+                                                contentEditable={editing}
+                                                onBlur={(e) => handleChange(index, "name", e.target.innerText)}
+                                            >{user.name}</span>
+                                        </li>
+                                        <li>
+                                            <span>Email:</span>
+                                            <span
+                                                contentEditable={editing}
+                                                onBlur={(e) => handleChange(index, "email", e.target.innerText)}
+                                            >{user.email}</span>
+                                        </li>
+                                        <li>
+                                            <span>Address:</span>
+                                            <span
+                                                contentEditable={editing}
+                                                onBlur={(e) => handleChange(index, "address", e.target.innerText)}
+                                            >{user.address}</span>
+                                        </li>
+                                        <li>
+                                            <span>Password:</span>
+                                            <span
+                                                contentEditable={editing}
+                                                onBlur={(e) => handleChange(index, "password", e.target.innerText)}
+                                            >{user.password}</span>
+                                        </li>
+                                    </ul>
+                                ) : (
+                                    <>
+                                        <p>
+                                            <span>Name:</span>
+                                            <span
+                                                contentEditable={editing}
+                                                onBlur={(e) => handleChange(index, "name", e.target.innerText)}
+                                            >{user.name}</span>
+                                        </p>
+                                        <p>
+                                            <span>Email:</span>
+                                            <span
+                                                contentEditable={editing}
+                                                onBlur={(e) => handleChange(index, "email", e.target.innerText)}
+                                            >{user.email}</span>
+                                        </p>
+                                        <p>
+                                            <span>Address:</span>
+                                            <span
+                                                contentEditable={editing}
+                                                onBlur={(e) => handleChange(index, "address", e.target.innerText)}
+                                            >{user.address}</span>
+                                        </p>
+                                        <p>
+                                            <span>Password:</span>
+                                            <span
+                                                contentEditable={editing}
+                                                onBlur={(e) => handleChange(index, "password", e.target.innerText)}
+                                            >{user.password}</span>
+                                        </p>
+                                    </>
+                                )}
+                            </div>
+                        ))
+                    ) : (
+                        <p>No users found.</p>
                     )}
                 </div>
             </div>
-            <button
-                className='btn btn-primary mt-3'
-                onClick={handleSave}
-            >
-                {editing ? 'Save' : 'Edit'}
+            <button className='btn btn-primary mt-3 me-3' onClick={handleSave}>
+                {/* {editing ? 'Save' : 'Edit'} */}
+                Save
             </button>
-            <button
-                className='btn btn-secondary mt-3 ml-3'
-                onClick={() => setEditing((prev) => !prev)}
-            >
+            <button className='btn btn-secondary mt-3 ml-3' onClick={() => setEditing(prev => !prev)}>
                 {editing ? 'Cancel' : 'Edit'}
             </button>
         </div>

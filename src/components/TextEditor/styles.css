@@ -1,11 +1,12 @@
 .toolbar{
-    background-color: pink;
+    /* background-color: pink; */
 }
 .tools{
     height: 50px;
-    width: 50px;
+    width: 60px;
     border: 1px solid gray;
 }
 .editor{
-    height: 500px;
+    height: 400px;
+    overflow-y: auto;
 }

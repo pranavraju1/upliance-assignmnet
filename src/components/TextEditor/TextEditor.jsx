@@ -141,6 +141,7 @@ const TextEditor = () => {
                             <div key={index} className='details-container mb-3'>
                                 {isListView ? (
                                     <ul>
+                                        <li><span>ID:</span> <span className='ms-2 p-2' contentEditable={editing} onBlur={(e) => handleChange(index, "id", e.target.innerText)}>{user.id}</span></li>
                                         <li><span>Name:</span> <span className='ms-2 p-2' contentEditable={editing} onBlur={(e) => handleChange(index, "name", e.target.innerText)}>{user.name}</span></li>
                                         <li><span>Email:</span> <span className='ms-2 p-2' contentEditable={editing} onBlur={(e) => handleChange(index, "email", e.target.innerText)}>{user.email}</span></li>
                                         <li><span>Address:</span> <span className='ms-2 p-2' contentEditable={editing} onBlur={(e) => handleChange(index, "address", e.target.innerText)}>{user.address}</span></li>
@@ -148,6 +149,7 @@ const TextEditor = () => {
                                     </ul>
                                 ) : (
                                     <>
+                                        <p><span>ID:</span> <span className='ms-2 p-2' contentEditable={editing} onBlur={(e) => handleChange(index, "id", e.target.innerText)}>{user.id}</span></p>
                                         <p><span>Name:</span> <span className='ms-2 p-2' contentEditable={editing} onBlur={(e) => handleChange(index, "name", e.target.innerText)}>{user.name}</span></p>
                                         <p><span>Email:</span> <span className='ms-2 p-2' contentEditable={editing} onBlur={(e) => handleChange(index, "email", e.target.innerText)}>{user.email}</span></p>
                                         <p><span>Address:</span> <span className='ms-2 p-2' contentEditable={editing} onBlur={(e) => handleChange(index, "address", e.target.innerText)}>{user.address}</span></p>

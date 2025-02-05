@@ -1,0 +1,12 @@
+.formContainer{
+    background: rgba(255, 255, 255, 0.2) !important; /* Semi-transparent white */
+    border-radius: 16px !important;
+    backdrop-filter: blur(10px) !important; /* Blur effect */
+    -webkit-backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important; /* Subtle border */
+    padding: 20px !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) !important; /* Soft shadow */
+}
+input{
+    /* background-color: transparent !important; */
+}

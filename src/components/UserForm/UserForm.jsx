@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './styles.css';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { Bounce, toast } from 'react-toastify';
 
 const UserForm = () => {
     const [formData, setFormData] = useState({
@@ -29,6 +30,20 @@ const UserForm = () => {
         const handleBeforeUnload = (event) => {
             if (isFormDirty) {
                 event.preventDefault();
+                // console.log("not saving event")
+
+                 toast.error('Click on submit to save your info.', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Bounce,
+                });
+
                 event.returnValue = "You have unsaved changes. Are you sure you want to leave?";
             }
         };
@@ -87,40 +102,54 @@ const UserForm = () => {
         console.log("User Data Saved:", userData);
         setFormData({ name: '', email: '', address: '', password: '' });
         setIsFormDirty(false);
+
+        toast.success('User Info Saved', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
+        });
     };
 
     return (
         <div className='container'>
-            <div className='card bg-light mt-5 p-4'>
-                <Form onSubmit={handleSubmit}>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Name</Form.Label>
-                        <Form.Control type="text" placeholder="Enter Name" name='name' value={formData.name} onChange={handleChange} />
-                        {errors.name && <p className="text-danger">{errors.name}</p>}
-                    </Form.Group>
+            <div className='row justify-content-center'>
+                <div className=' col-lg-10 card formContainer mt-5 p-4'>
+                    <Form onSubmit={handleSubmit}>
+                        <Form.Group className="mb-3">
+                            <Form.Label className='fw-bold'>Name</Form.Label>
+                            <Form.Control type="text" placeholder="Enter Name" name='name' value={formData.name} onChange={handleChange} />
+                            {errors.name && <p className="text-danger">{errors.name}</p>}
+                        </Form.Group>
 
-                    <Form.Group className="mb-3">
-                        <Form.Label>Address</Form.Label>
-                        <Form.Control type="text" placeholder="Enter Address" name='address' value={formData.address} onChange={handleChange} />
-                        {errors.address && <p className="text-danger">{errors.address}</p>}
-                    </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label className='fw-bold'>Address</Form.Label>
+                            <Form.Control type="text" placeholder="Enter Address" name='address' value={formData.address} onChange={handleChange} />
+                            {errors.address && <p className="text-danger">{errors.address}</p>}
+                        </Form.Group>
 
-                    <Form.Group className="mb-3">
-                        <Form.Label>Email address</Form.Label>
-                        <Form.Control type="email" placeholder="Enter Email" name='email' value={formData.email} onChange={handleChange} />
-                        {errors.email && <p className="text-danger">{errors.email}</p>}
-                    </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label className='fw-bold'>Email address</Form.Label>
+                            <Form.Control type="email" placeholder="Enter Email" name='email' value={formData.email} onChange={handleChange} />
+                            {errors.email && <p className="text-danger">{errors.email}</p>}
+                        </Form.Group>
 
-                    <Form.Group className="mb-3">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" placeholder="Enter Password" name='password' value={formData.password} onChange={handleChange} />
-                        {errors.password && <p className="text-danger">{errors.password}</p>}
-                    </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label className='fw-bold'>Password</Form.Label>
+                            <Form.Control type="password" placeholder="Enter Password" name='password' value={formData.password} onChange={handleChange} />
+                            {errors.password && <p className="text-danger">{errors.password}</p>}
+                        </Form.Group>
 
-                    <Button variant="primary" type="submit">
-                        Submit
-                    </Button>
-                </Form>
+                        <Button variant="primary" type="submit" className='fw-semibold fs-5 mt-4'>
+                            Submit
+                        </Button>
+                    </Form>
+                </div>
             </div>
         </div>
     );
